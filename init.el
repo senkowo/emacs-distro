@@ -10,6 +10,9 @@
 ;; - add to load-path
 ;;
 
+;; TODO list:
+;; - 
+
 ;;; Code:
 
 ;;; Preliminary:
@@ -46,6 +49,7 @@
       (expand-file-name (if load-file-name
 			    (file-name-directory load-file-name)
 			  user-emacs-directory)))
+
 (defvar esper-modules-dir (file-name-concat user-emacs-directory "modules")
   "Path to the modules directory.")
 (defvar esper-personal-dir (file-name-concat user-emacs-directory "personal")
@@ -63,25 +67,36 @@
 
 ;; Init modules vars:
 (defvar esper-init-modules
-  '("01-logging"
-    "02-package-manager"
-    "03-use-package"
-    "04-no-littering")
+  '("01-good-def-vars"
+    "02-logging"
+    "03-package-manager"
+    "04-use-package"
+    "05-no-littering")
   "The init modules to be loaded.
 Should be edited in `esper-init-config-file'")
 (defvar esper-init-modules-default esper-init-modules
   "The default init modules to be loaded (fallback).")
 
+(defvar esper-exclude-files
+  (list esper-early-config-file esper-init-config-file)
+  "List of files to exclude from loading.")
+
 ;; Package manager:
 (defvar esper-package-manager 'straight
   "The package manager to use.")
+
+;; where changes made through the customize UI will be stored
+(defvar custom-file (expand-file-name "custom.el" esper-personal-dir))
+
+;; location to keep themes
+(setq custom-theme-directory (file-name-concat user-emacs-directory "misc/themes"))
 
 ;; Misc:
 ;; TODO: issue: benchmark variable overwrite has to happen in early-config... init-config instead somehow?
 (defvar esper-benchmark (getenv "ESPER_BENCHMARK")
   "Benchmark module load times in macros `+load' and `+require'.")
 
-;; Overwrite the default variables:
+;;; Overwrite the default variables:
 
 ;; This is done to allow for flexible customization of this file without direct editing.
 (defun esper-overwrite-variables ()
@@ -109,7 +124,7 @@ For each alist pair, its car is the variable name and cdr is the new value."
 (add-subdirs-to-load-path esper-vendor-dir)
 
 
-;;; Define fancy module-loading macros:
+;;; Define fancy module-loading functions:
 
 (defun +load--warn-error (type thing err)
   "Display a warning of level :error.
@@ -120,19 +135,10 @@ ERR is an error value with the structure (ERROR-SYMBOL . DATA)."
 		   (format "%s: %s" thing (error-message-string err))
 		   :error))
 
-(defun +load--expand-variables (args)
-  "Assuming any symbols in list ARGS are variable names, expand and concat them."
-  (flatten-tree
-   (mapcar (lambda (arg)
-	     (if (symbolp arg)
-		 (eval arg)
-	       arg))
-	   args)))
-
 (defalias '+require--warn-error '+load--warn-error)
-(defalias '+require--expand-variables '+load--expand-variables)
 
-(defun +load-func (&rest modules)
+(defun +load (&rest modules)
+  "Loads the module(s) with soft error-handling and optional benchmarking."
   (setq modules (flatten-tree modules))
   (mapc (lambda (mod)
 	  (let ((body `(condition-case-unless-debug e
@@ -143,82 +149,37 @@ ERR is an error value with the structure (ERROR-SYMBOL . DATA)."
 	      (eval body))))
 	modules))
 
-;; (+load-func "01-logging" "ri-gui")
-
-(defmacro +load (modules)
-  "Invoke `load' on a list of MODULES with soft-error handling.
-If `esper-benchmark' is non-nil, benchmark load-time."
-  ;; (setq modules (+load--expand-variables modules))
-  (message "DEBUG: modules: %S" modules)
-  `(progn
-     ,@(mapcar (lambda (mod)
-		 (let ((body `(condition-case-unless-debug e				  
-				  (load ,mod)
-				(error (+load--warn-error '+load ,mod e)))))
-		   (if esper-benchmark
-		       `(benchmark-progn ,body)
-		     `,body)))
-	       modules)))
-
-;; (load "ri-gui")
-
-;; (setq test "ri-gui")
-
-;; (+load-func esper-init-modules)
-;; (+load-func esper-init-modules "ri-guix" test)
-
-(defmacro +require (&rest modules)
-  "Invoke `require' on a list of MODULES with soft-error handling.
-If `esper-benchmark' is non-nil, benchmark load-time."
-  (setq modules (+require--expand-variables modules))
-  `(progn
-     ,@(mapcar (lambda (mod)
-		 (let ((body `(condition-case-unless-debug e
-				  (require ,mod)
-				(error (+require--warn-error '+load ,mod e)))))
-		   (if esper-benchmark
-		       `(benchmark-progn ,body)
-		     `,body)))
-	       modules)))
-
+(defun +require (&rest modules)
+  (setq modules (flatten-tree modules))
+  (mapc (lambda (mod)
+	  (let ((body `(condition-case-unless-debug e
+			   (require ,mod)
+			 (error (+require--warn-error '+require ,mod e)))))
+	    (if esper-benchmark
+		(benchmark-progn (eval body))
+	      (eval body))))
+	modules))
 
 ;;; Load init-config to tweak init-module loading:
 
 ;; In `esper-init-config-file', you can edit the init modules to use,
 ;; the package manager to use, etc etc.
-(let ((path esper-init-config-file))
-  (when (file-exists-p path)
-    (+load-func path)))
+(when (file-exists-p esper-init-config-file)
+  (+load esper-init-config-file))
 
-;; (+load "/home/nya/.config/esper/personal/esper/init-config.el")
-
-;;; Load init-modules:
-
+;; load init modules
 (+load esper-init-modules)
 
 ;;; Load user-specified optional modules:
 
-;; (let ((path esper-)))
-;; (+load )
+(when (file-exists-p esper-modules-config-file)
+  (+load esper-modules-config-file))
 
 ;;; Load all user config files:
 
 (let ((all-files (directory-files esper-personal-dir 't "^[^#\.].*\\.el$"))
-      (exclude (list esper-early-config-file esper-init-config-file)))
+      (exclude esper-exclude-files))
   (dolist (ex exclude)
     (setq all-files (delete ex all-files)))
   (+load all-files))
 
-;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(safe-local-variable-values '((flycheck-disabled-checkers emacs-lisp-checkdoc))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

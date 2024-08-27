@@ -1,0 +1,55 @@
+#+startup: showall
+
+* Philosophy and design:
+:PROPERTIES:
+:VISIBILITY: folded
+:END:
+
+- Issues with most emacs distros:
+  + As you seek more customized and fine-tuned configuration, the layer of abstraction brought about by the framework makes it too difficult to strip down into something simpler, and often makes it necessary to completely switch over to a different emacs framework/distro, or just emacs-from-scratch.
+    
+- This framework tries to solve these issues by:
+  + Working seemlessly out of the box, but made up of modules that can be easily stripped out and replaced with one's own.
+    - can gradually transform the pre-made config to vanilla emacs.
+  + less abstraction and more pure.
+  + close the gap between the framework and your personal config.
+    - get closer to the feeling of a custom emacs distro.
+
+* Name ideas: 
+:PROPERTIES:
+:VISIBILITY: folded
+:END:
+
+esper
+eclair
+clarity
+eclipse
+inter
+layers
+recurse
+
+* Ideas:
+- cool interface for exploring the modules and code (parse modules & comments into org documents (use a package?)).
+* Structure:
+
+** early-init.el
+not to be changed
+- prevent package.el from loading
+- set color at startup to last theme's
+
+** init.el
+not to be changed
+- lower gc freq
+- important vars (dirs)
+- load early config
+- add modules to load-path
+- load pivotal modules
+- load userside files
+
+** init modules
+*** logging
+*** package manager
+**** straight
+**** package
+*** use-package (other?)
+*** no-littering
