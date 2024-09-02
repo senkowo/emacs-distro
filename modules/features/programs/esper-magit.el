@@ -11,10 +11,11 @@
    "vv" 'magit))
 
 ;; highlight todo's and other keywords in magit
-(use-package magit-todos
-  :ensure t
-  :after magit
-  :config (magit-todos-mode 1))
+;; TODO: broken package, "error in process sentinel: Wrong type argument: stringp, nil"
+;; (use-package magit-todos
+;;   :ensure t
+;;   :after magit
+;;   :config (magit-todos-mode 1))
 
 ;; Access github and gitlab commits/issues/pr/etc from Emacs:
 ;; (use-package forge

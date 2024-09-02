@@ -56,6 +56,16 @@ Version: 2018-12-23 2022-04-07"
 	(dired-sort-other xarg ))
     (message "Not in dired buffer.")))
 
+;;; --- Bookmarks: ---
+;; TODO: move elsewhere?
+
+(setq bookmark-save-flag 1) ; save bookmarks to file after every change
+(C-c-define-key
+  "fb" '(:ignore t :which-key "bookmarks")
+  "fbs" 'bookmark-set
+  "fbj" 'bookmark-jump
+  "fbl" 'list-bookmarks)
+
 ;;; --- leader key defs: ----
 
 (C-c-define-key
@@ -63,6 +73,5 @@ Version: 2018-12-23 2022-04-07"
   "dd" 'dired
   "di" 'dired-jump
   ;; "dh" 'ri/dired-hide-dotfiles-mode-toggle ; TODO!
-  "ds" 'ri/dired-sort
-  )
+  "ds" 'ri/dired-sort)
 

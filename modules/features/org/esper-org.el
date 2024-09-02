@@ -78,7 +78,8 @@
 
 ;; org LaTeX
 
-(use-package auctex)
+;; (use-package auctex
+;;   :ensure t)
 
 ;; TODO: causes org bugs?
 ;; (use-package org-fragtog

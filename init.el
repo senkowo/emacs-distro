@@ -71,7 +71,8 @@
     "02-logging"
     "03-package-manager"
     "04-use-package"
-    "05-no-littering")
+    "05-no-littering"
+    "06-module-dependencies")
   "The init modules to be loaded.
 Should be edited in `esper-init-config-file'")
 (defvar esper-init-modules-default esper-init-modules

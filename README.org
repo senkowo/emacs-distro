@@ -27,6 +27,24 @@ eclipse
 inter
 layers
 recurse
+exgmacs
+exgemacs
+uzumaki
+uzu
+ender
+scaffold
+mef (modular emacs framework
+mend
+clay
+origami
+fold
+frame
+mirror
+diffuse
+solute
+solvent
+interweave
+interwine
 
 * Ideas:
 - cool interface for exploring the modules and code (parse modules & comments into org documents (use a package?)).

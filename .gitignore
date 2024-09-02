@@ -4,5 +4,7 @@ etc
 var
 elpaca
 straight
+elpa
+eln-cache
 
 customs.el

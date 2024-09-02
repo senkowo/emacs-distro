@@ -8,3 +8,5 @@
 	     "Gg" 'guix
 	     "Gp" '(guix-packages-by-name :which-key "search packages")))
 
+(global-set-key (kbd "C-s") 'consult-line)
+
