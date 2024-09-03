@@ -30,6 +30,7 @@
   (org-ellipsis " ▼") ; symbol for folded content
   (org-startup-indented t) ; indent headings and body
   (org-startup-folded 'showall) ; default startup folding
+  ;; (org-src-preserve-indentation t) ; no space at front of code blocks.
   :hook
   (org-mode . ri/org-font-setup)
   (org-mode . visual-line-mode)
@@ -46,9 +47,9 @@
   (add-to-list 'org-structure-template-alist '("clang" . "src c"))
   (add-to-list 'org-structure-template-alist '("gcc" . "src c"))
   (add-to-list 'org-structure-template-alist '("cl" . "src common-lisp"))
-  (add-to-list 'org-structure-template-alist
-               '("mani" . "src scheme :noweb-ref packages :noweb-sep \"\""))
-)
+  (add-to-list 'org-structure-template-alist '("java" . "src java"))
+  (add-to-list 'org-structure-template-alist '("mani" .
+					       "src scheme :noweb-ref packages :noweb-sep \"\"")))
 
 ;;; Misc org packages
 
@@ -73,8 +74,8 @@
 
 ;; iscroll (not work with evil by default)
 
-(use-package iscroll
-  :hook (org-mode . iscroll-mode))
+;; (use-package iscroll
+;;   :hook (org-mode . iscroll-mode))
 
 ;; org LaTeX
 

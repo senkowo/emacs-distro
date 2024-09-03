@@ -62,16 +62,15 @@ Version: 2018-12-23 2022-04-07"
 (setq bookmark-save-flag 1) ; save bookmarks to file after every change
 (C-c-define-key
   "fb" '(:ignore t :which-key "bookmarks")
-  "fbs" 'bookmark-set
-  "fbj" 'bookmark-jump
-  "fbl" 'list-bookmarks)
+  "fb" 'consult-bookmark
+  "fB" 'bookmark-set)
 
 ;;; --- leader key defs: ----
 
 (C-c-define-key
   "d"  '(:ignore t :which-key "dired")
   "dd" 'dired
-  "di" 'dired-jump
+  "dj" 'dired-jump
   ;; "dh" 'ri/dired-hide-dotfiles-mode-toggle ; TODO!
   "ds" 'ri/dired-sort)
 

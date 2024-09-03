@@ -38,13 +38,14 @@
 
 (setq ri/is-guix-system t)
 
-;;;; ############### Overarching: ###############
-(+load "esper-completion")
-;; TODO: Language server
-
 ;;;; ############### Keybinds: ###############
 (+load "esper-meow")
 ;; TODO: Evil
+
+;;;; ############### Overarching: ###############
+;; Minibuffer completion frameworks:
+(+load "esper-completion")
+;; TODO: Language server
 
 ;;;; ############### Emacs generic: ###############
 (+load "esper-windows")
