@@ -5,3 +5,6 @@
   (mood-line-format mood-line-format-default)
   :config
   (mood-line-mode 1))
+
+
+(provide 'esper-modeline)

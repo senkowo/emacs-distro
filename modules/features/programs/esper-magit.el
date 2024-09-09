@@ -21,3 +21,6 @@
 ;; (use-package forge
 ;;   :ensure t
 ;;   :after magit)
+
+
+(provide 'esper-magit)

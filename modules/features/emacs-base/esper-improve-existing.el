@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 
 (use-package helpful
   :custom
@@ -10,7 +11,7 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-key] . helpful-key)
   ("C-h h" . helpful-at-point)
-  ("C-h H" . view-hello-file) ; command originally at "C-h h"
+  ("C-h H" . view-hello-file)	       ; command originally at "C-h h"
   ("C-h M" . which-key-show-major-mode)
   ("C-h E" . describe-keymap))
 
@@ -22,3 +23,6 @@
   :ensure t
   :init
   (savehist-mode 1))
+
+
+(provide 'esper-improve-existing)

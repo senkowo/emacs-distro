@@ -7,3 +7,6 @@
   :bind (:map paredit-mode-map
 	      ("M-s" . nil) ; paredit-splice-sexp
 	      ))
+
+
+(provide 'esper-lang-lisp-adv)

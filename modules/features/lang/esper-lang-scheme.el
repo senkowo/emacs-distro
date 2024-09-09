@@ -13,3 +13,6 @@
 (use-package geiser-guile
   :ensure t
   :after geiser)
+
+
+(provide 'esper-lang-scheme)

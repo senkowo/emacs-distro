@@ -34,3 +34,6 @@
 (when (ri/native-transparency-supported?)
   (set-frame-parameter nil 'alpha-background my-transparency-value) ; For current frame
   (add-to-list 'default-frame-alist `(alpha-background . ,my-transparency-value)))
+
+
+(provide 'esper-transparency)

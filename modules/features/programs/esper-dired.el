@@ -74,3 +74,5 @@ Version: 2018-12-23 2022-04-07"
   ;; "dh" 'ri/dired-hide-dotfiles-mode-toggle ; TODO!
   "ds" 'ri/dired-sort)
 
+
+(provide 'esper-dired)

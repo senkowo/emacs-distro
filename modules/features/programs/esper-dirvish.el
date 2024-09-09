@@ -83,3 +83,5 @@
      "feh dired" nil
      (concat "feh --bg-fill \"" path "\""))))
 
+
+(provide 'esper-dirvish)

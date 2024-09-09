@@ -197,3 +197,5 @@ Set up for dvorak-programmer (dvp) keyboard layout."
   (ri/meow-dvp-setup)
   (meow-global-mode 1))
 
+
+(provide 'esper-meow)

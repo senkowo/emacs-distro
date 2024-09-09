@@ -63,13 +63,14 @@
 ;; consult
 (use-package consult
   :ensure t
+  :demand t
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-c M-x" . consult-mode-command)
          ;; ("C-c )" . consult-kmacro)
 	 
          ;; C-x bindings in `ctl-x-map'
          ("C-x M-:" . consult-complex-command) ;; repeat-complex-command
-         ("C-x b" . consult-buffer) ;; switch-to-buffer
+         ("C-x b" . consult-buffer)	       ;; switch-to-buffer
          ("C-x 4 b" . consult-buffer-other-window) ;; switch-to-buffer-other-window
          ("C-x 5 b" . consult-buffer-other-frame) ;; switch-to-buffer-other-frame
          ("C-x t b" . consult-buffer-other-tab)	;; switch-to-buffer-other-tab
@@ -107,13 +108,13 @@
          ("M-s L" . consult-line-multi)
          ("M-s k" . consult-keep-lines)
          ("M-s u" . consult-focus-lines)
-         ("M-s M" . consult-man) ; T for terminal
+         ("M-s M" . consult-man)	; T for terminal
 	 ("M-s I" . consult-info)
 	 
          ;; Isearch integration
          ("M-s e" . consult-isearch-history)
          :map isearch-mode-map
-         ("M-e" . consult-isearch-history) ;; isearch-edit-string
+         ("M-e" . consult-isearch-history)   ;; isearch-edit-string
          ("M-s e" . consult-isearch-history) ;; isearch-edit-string
          ("M-s l" . consult-line) ;; Needed by: consult-line to detect isearch
          ("M-s L" . consult-line-multi)	;; Needed by: consult-line to detect isearch
@@ -186,3 +187,5 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+
+(provide 'esper-vertico)

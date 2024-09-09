@@ -60,3 +60,6 @@
   "amp" 'multi-vterm-prev
   "amn" 'multi-vterm-next
   "amm" 'multi-vterm-dedicated-toggle)
+
+
+(provide 'esper-terminals)

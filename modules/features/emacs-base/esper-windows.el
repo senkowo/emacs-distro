@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 
 (defun ri/delete-window-auto-balance ()
   "Delete current window and re-balance."
@@ -74,3 +75,4 @@
  "wio" 'switch-to-minibuffer)
 
 
+(provide 'esper-windows)

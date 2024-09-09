@@ -10,3 +10,6 @@
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 (require 'use-package)
+
+
+(provide '03--package-manager-package)

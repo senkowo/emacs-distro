@@ -10,3 +10,21 @@
 
 (global-set-key (kbd "C-s") 'consult-line)
 
+
+(defun ri/insert-provide-sexp ()
+  (interactive)
+  (let* ((basename (file-name-base))
+	 (search-regex "^(provide .*)")
+	 (new-string (format "(provide '%s)" basename))
+	 (found nil))
+    (save-excursion
+      (goto-char (point-max))
+      (when (re-search-backward search-regex nil t)
+        (replace-match new-string)
+        (setq found t)
+	(message "Replaced for %s" basename))
+      (unless found
+	(goto-char (point-max))
+	(newline)
+	(insert new-string)
+	(message "Doesn't exist, inserted %s for %s" new-string basename)))))

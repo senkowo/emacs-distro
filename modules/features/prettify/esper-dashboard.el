@@ -14,3 +14,6 @@
                                   (redisplay)
                                   (run-hooks 'dashboard-after-initialize-hook)))
   (setq dashboard-startup-banner (file-name-concat user-emacs-directory "misc/icons/horse3-1000.png")))
+
+
+(provide 'esper-dashboard)

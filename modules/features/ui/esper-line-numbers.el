@@ -18,3 +18,6 @@
 ;; TODO: rewrite all this into disabling mode per pkg hook.
 (dolist (mode display-line-numbers-mode-exclude)
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+
+(provide 'esper-line-numbers)

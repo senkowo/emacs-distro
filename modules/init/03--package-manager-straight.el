@@ -18,3 +18,5 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+
+(provide '03--package-manager-straight)

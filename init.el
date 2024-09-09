@@ -161,22 +161,31 @@ ERR is an error value with the structure (ERROR-SYMBOL . DATA)."
 	      (eval body))))
 	modules))
 
-;;; Load init-config to tweak init-module loading:
+;;; TODO: move elsewhere?
+
+(defun featurep-first (features)
+  (cl-some (lambda (pkg)
+	     (when (featurep pkg)
+	       pkg))
+	   (flatten-tree features)))
+
+;;; Load optional config file
 
 ;; In `esper-init-config-file', you can edit the init modules to use,
 ;; the package manager to use, etc etc.
 (when (file-exists-p esper-init-config-file)
   (+load esper-init-config-file))
 
-;; load init modules
+;;; Load init modules
+
 (+load esper-init-modules)
 
-;;; Load user-specified optional modules:
+;;; Load modules based on config file:
 
 (when (file-exists-p esper-modules-config-file)
   (+load esper-modules-config-file))
 
-;;; Load all user config files:
+;;; Load all user config files lexigraphically:
 
 (let ((all-files (directory-files esper-personal-dir 't "^[^#\.].*\\.el$"))
       (exclude esper-exclude-files))

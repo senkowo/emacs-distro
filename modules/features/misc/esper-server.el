@@ -6,3 +6,6 @@
     (message "Emacsclient Server started!")))
 
 (add-hook 'after-init-hook #'ri/start-server-if-not-running)
+
+
+(provide 'esper-server)

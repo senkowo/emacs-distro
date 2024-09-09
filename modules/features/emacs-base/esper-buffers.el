@@ -7,7 +7,7 @@
   "bn" 'next-buffer
   "bp" 'previous-buffer
   "bo" '(mode-line-other-buffer :which-key "last-buffer")
-  "bb" (pcase (+featurep-first '(consult))
+  "bb" (pcase (featurep-first '(consult))
 	 ('consult 'consult-buffer)
 	 (_        'switch-to-buffer)))
 
@@ -15,23 +15,5 @@
 
 ;;; TODO: add lexical scoping to every file (or else featurep might not work)
 
-(defmacro +pcase-featurep-first (features &rest args)
-  "A wrapper around `pcase' to find the first of FEATURES that exists.
-Each symbol in FEATURES is evaluated with `featurep' until it returns t.
-ARGS is treated like ARGS in `pcase'."
-  `(pcase ',(cl-some (lambda (pkg)
-		       (when (featurep pkg)
-			 pkg))
-		     (flatten-tree features))
-     ,@args))
+(provide 'esper-buffers)
 
-(defun +featurep-first (features)
-  (cl-some (lambda (pkg)
-	     (when (featurep pkg)
-	       pkg))
-	   (flatten-tree features)))
-
-(pcase (featurep-first '(consult ivy))
-  ('consult 'consult-buffer)
-  ('ivy 'ivy-switch-to-buffer)
-  (_ 'switch-to-buffer))

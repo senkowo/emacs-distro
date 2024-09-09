@@ -25,3 +25,5 @@
             ("\\`\\(/tmp\\|/dev/shm\\)\\([^/]*/\\)*\\(.*\\)\\'" "\\3")
             ("." ,auto-save-dir t)))))
 
+
+(provide '05-no-littering)
