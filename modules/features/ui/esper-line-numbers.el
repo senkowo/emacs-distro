@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 
 (global-display-line-numbers-mode t)  ;; add line numbers
 (column-number-mode 1) ; (columns on modeline)

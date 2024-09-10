@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 
 (use-package dired :straight (:type built-in)
   :ensure nil

@@ -1,4 +1,4 @@
-
+;; -*- lexical-binding: t; -*-
 
 (defun ri/meow-dvp-setup ()
   "My Meow configuration.

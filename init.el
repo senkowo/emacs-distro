@@ -11,6 +11,9 @@
 ;;
 
 ;; TODO list:
+;; - elfeed
+;; - java env
+;; - evil mode
 ;; - 
 
 ;;; Code:
@@ -67,12 +70,12 @@
 
 ;; Init modules vars:
 (defvar esper-init-modules
-  '("01-good-def-vars"
-    "02-logging"
-    "03-package-manager"
-    "04-use-package"
-    "05-no-littering"
-    "06-module-dependencies")
+  '(01-good-def-vars
+    02-logging
+    03-package-manager
+    04-use-package
+    05-no-littering
+    06-module-dependencies)
   "The init modules to be loaded.
 Should be edited in `esper-init-config-file'")
 (defvar esper-init-modules-default esper-init-modules
@@ -127,7 +130,38 @@ For each alist pair, its car is the variable name and cdr is the new value."
 
 ;;; Define fancy module-loading functions:
 
-(defun +load--warn-error (type thing err)
+(defmacro +benchmark-progn (feature action &rest body)
+  "A slight modification to the `benchmark-progn' macro.
+It now prints FEATURE when printing the time taken to eval BODY.
+ACTION can be either \\='require or \\='load, which prepends FEATURE with either
+\"Required: \" or \"Loaded: \". If neither match, print \\=`\",ACTION: \"."
+  (declare (debug t) (indent defun))
+  (let ((value (make-symbol "value"))
+	(start (make-symbol "start"))
+	(gcs (make-symbol "gcs"))
+	(gc (make-symbol "gc")))
+    `(let ((,gc gc-elapsed)
+	   (,gcs gcs-done)
+           (,start (current-time))
+           (,value (progn
+                     ,@body)))
+       (message " Elapsed time: %fs, %s%s%s"
+                (float-time (time-since ,start))
+		(cond ((eq ,action 'require)
+		       "Required: '")
+		      ((eq ,action 'load)
+		       "Loaded: ")
+		      (t (format "%s: " ,action)))
+		,feature
+                (if (> (- gcs-done ,gcs) 0)
+                    (format " (%fs in %d GCs)"
+	                    (- gc-elapsed ,gc)
+	                    (- gcs-done ,gcs))
+                  ""))
+       ;; Return the value of the body.
+       ,value)))
+
+(defun +warn-error (type thing err)
   "Display a warning of level :error.
 TYPE is a symbol for the group name.
 THING is a string specifying the process that went wrong.
@@ -136,32 +170,83 @@ ERR is an error value with the structure (ERROR-SYMBOL . DATA)."
 		   (format "%s: %s" thing (error-message-string err))
 		   :error))
 
-(defalias '+require--warn-error '+load--warn-error)
-
 (defun +load (&rest modules)
   "Loads the module(s) with soft error-handling and optional benchmarking."
   (setq modules (flatten-tree modules))
   (mapc (lambda (mod)
 	  (let ((body `(condition-case-unless-debug e
 			   (load ,mod)
-			 (error (+load--warn-error '+load ,mod e)))))
+			 (error (+warn-error '+load ,mod e)))))
 	    (if esper-benchmark
-		(benchmark-progn (eval body))
+		(+benchmark-progn mod 'load
+		  (eval body))
 	      (eval body))))
 	modules))
 
-(defun +require (&rest modules)
-  (setq modules (flatten-tree modules))
-  (mapc (lambda (mod)
-	  (let ((body `(condition-case-unless-debug e
-			   (require ,mod)
-			 (error (+require--warn-error '+require ,mod e)))))
-	    (if esper-benchmark
-		(benchmark-progn (eval body))
-	      (eval body))))
-	modules))
+;; (defun +require (&rest modules)
+;;   (setq modules (flatten-tree modules))
+;;   (mapc (lambda (mod)
+;; 	  (let ((body `(condition-case-unless-debug e
+;; 			   (require ',mod)
+;; 			 (error (+warn-error '+require ,mod e)))))
+;; 	    (if esper-benchmark
+;; 		(+benchmark-progn mod 'require
+;; 		  (eval body))
+;; 	      (eval body))))
+;; 	modules))
 
-;;; TODO: move elsewhere?
+;; I GET THE ISSUE: load init modules is failing
+
+;; (defun +require (modules)
+;;   (setq modules (flatten-tree modules))
+;;   (mapcar (lambda (mod)
+;; 	    (let ((wrapper (if esper-benchmark `(+benchmark-progn ',mod 'require) '(progn))))
+;; 	      (eval
+;; 	       `(,@wrapper
+;; 		 (condition-case-unless-debug e
+;; 		     (require ',mod)
+;; 		   (error (+warn-error '+require ',mod e)))))))
+;; 	  modules))
+
+;; (defun +require--parse-body (body)
+;;   "Parses BODY and returns a cons of init-body and config-body."
+;;   (let (cur current-keyword init-body config-body)
+;;     (while body
+;;       (if (keywordp (setq current-keyword (pop body)))
+;; 	  (progn
+;; 	    (while (and body (not (keywordp (car body))))
+;; 	      (setq cur (pop body))
+;; 	      (pcase current-keyword
+;; 		(:init (push cur init-body))
+;; 		(:config (push cur config-body)))))
+;; 	(error "Expecting keyword")))
+;;     (cons init-body config-body)))
+
+(defmacro +require (feature &rest body)
+  "A massive macro around `require'.
+Adds optional benchmarking, soft error-handling, and keywords like
+`use-package'. The only keywords supported are :init and :config.
+FEATURE is what will be passed to `require' and must be a symbol.
+BODY is for optional keywords and their arguments."
+  (declare (indent defun))
+  (let ((wrapper (if esper-benchmark `(+benchmark-progn ,feature 'require) '(progn))))
+    `(,@wrapper
+      (condition-case-unless-debug e
+	  ,(let (cur current-keyword init-body config-body)
+	     (while body
+	       (if (keywordp (setq current-keyword (pop body)))
+		   (progn
+		     (while (and body (not (keywordp (car body))))
+		       (setq cur (pop body))
+		       (pcase current-keyword
+			 (:init (push cur init-body))
+			 (:config (push cur config-body)))))
+		 (error "Expecting keyword")))
+	     `(progn
+		,@(append (reverse init-body)
+			  `((require ,feature))
+			  (reverse config-body))))
+	(error (+warn-error '+require ,feature e))))))
 
 (defun featurep-first (features)
   (cl-some (lambda (pkg)
@@ -176,9 +261,11 @@ ERR is an error value with the structure (ERROR-SYMBOL . DATA)."
 (when (file-exists-p esper-init-config-file)
   (+load esper-init-config-file))
 
-;;; Load init modules
+;;; Require init modules
 
-(+load esper-init-modules)
+(mapc (lambda (mod)
+	(+require mod))
+      esper-init-modules)
 
 ;;; Load modules based on config file:
 
@@ -192,4 +279,17 @@ ERR is an error value with the structure (ERROR-SYMBOL . DATA)."
   (dolist (ex exclude)
     (setq all-files (delete ex all-files)))
   (+load all-files))
-
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(geiser-guile geiser paredit flycheck fireplace dashboard free-keys key-quiz dired-open all-the-icons-dired multi-vterm magit embark-consult embark marginalia consult vertico meow desktop-environment exwm mu4e vterm which-key))
+ '(safe-local-variable-values '((flycheck-disabled-checkers emacs-lisp-checkdoc))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

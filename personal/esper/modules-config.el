@@ -38,54 +38,59 @@
 (setq ri/is-guix-system t)
 
 ;;;; ############### Keybinds: ###############
-(+load "esper-meow")
+(+require 'esper-meow)
 ;; TODO: Evil
 
 ;;;; ############### Overarching: ###############
 ;; Minibuffer completion frameworks:
-(+load "esper-vertico")
+(+require 'esper-vertico)
 ;; TODO: Language server
 
 ;;;; ############### Emacs generic: ###############
-(+load "esper-windows")
-(+load "esper-buffers")
-(+load "esper-improve-existing")
+(+require 'esper-windows)
+(+require 'esper-buffers)
+(+require 'esper-improve-existing)
 
 ;;;; ############### UI: ###############
-(+load "esper-modeline")
-(+load "esper-line-numbers")
+(+require 'esper-modeline)
+(+require 'esper-line-numbers)
 
 ;;;; ############### org: ###############
-(+load "esper-org")
-(+load "esper-workflow")
+(+require 'esper-org)
+(+require 'esper-workflow)
 
 ;;;; ############### applications: ###############
-(+load "esper-magit")
-(+load "esper-terminals")
-(+load "esper-dired")
+(+require 'esper-magit)
+(+require 'esper-terminals)
+(+require 'esper-dired)
 ;; TODO: dirvish
-;; (+load "esper-dirvish")
+;; (+require 'esper-dirvish)
 
 ;;;; ############### tutorial/guide: ###############
-(+load "esper-tutorials")
+(+require 'esper-tutorials)
 
 ;;;; ############### customization: ###############
-(+load "esper-transparency")
-(+load "esper-dashboard")
-(+load "esper-fun")
+(+require 'esper-transparency)
+
+;; TODO: make :before and :after keywords for +require
+(+require 'esper-dashboard
+  :init
+  (setq dashboard-startup-banner
+	(file-name-concat user-emacs-directory "misc/icons/horse3-1000.png")))
+
+(+require 'esper-fun)
 
 ;;;; ############### code: ###############
-(+load "esper-lang-general")
+(+require 'esper-lang-general)
 
-(+load "esper-lang-lisp")
-(+load "esper-lang-lisp-adv")
-(+load "esper-lang-scheme")
+(+require 'esper-lang-lisp)
+(+require 'esper-lang-lisp-adv)
+(+require 'esper-lang-scheme)
 
 ;;;; ############### misc/temp: ###############
-(+load "esper-server")
+(+require 'esper-server)
 ;; tODO: bring over old ri-rest
-(+load "esper-rest")
-
+(+require 'esper-rest)
 
 
 

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 
 ;; git client
 (use-package magit
@@ -7,8 +8,8 @@
   :custom (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   :config
   (C-c-define-key
-   "v" '(:ignore t :which-key "magit")
-   "vv" 'magit))
+    "v" '(:ignore t :which-key "magit")
+    "vv" 'magit))
 
 ;; highlight todo's and other keywords in magit
 ;; TODO: broken package, "error in process sentinel: Wrong type argument: stringp, nil"

@@ -16,8 +16,7 @@
 
 ;; load the selected package manager 
 (pcase esper-package-manager
-  ('straight (+load "03--package-manager-straight"))
-  ('package  (+load "03--package-manager-package")))
-
+  ('straight (+require '03--package-manager-straight))
+  ('package  (+require '03--package-manager-package)))
 
 (provide '03-package-manager)

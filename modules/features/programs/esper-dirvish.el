@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 
 ;; Dirvish depends on:
 ;; - fd
@@ -37,7 +38,7 @@
    "-l --almost-all --human-readable --group-directories-first --no-group") ; AhoG
   ;; TODO: what's this?
   ;; (dired-dwim-target t) ; auto select dir to move to if another dired window open.
-  (delete-by-moving-to-trash t) ; NOTE: depends on trash-cli
+  (delete-by-moving-to-trash t)		; NOTE: depends on trash-cli
   ;; File attributes to show
   (dirvish-attributes
    '(all-the-icons file-time file-size collapse subtree-state vc-state git-msg))

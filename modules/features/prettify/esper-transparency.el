@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 
 (defvar my-transparency-value 80
   "Value used for transparency.")

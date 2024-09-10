@@ -1,4 +1,5 @@
 
+;;; Guix ---
 
 (use-package guix
   :ensure t
@@ -8,8 +9,14 @@
 	     "Gg" 'guix
 	     "Gp" '(guix-packages-by-name :which-key "search packages")))
 
+;;; Vertico ---
+
 (global-set-key (kbd "C-s") 'consult-line)
 
+;;; Dashboard ---
+
+
+;;; Development ---
 
 (defun ri/insert-provide-sexp ()
   (interactive)
@@ -28,3 +35,5 @@
 	(newline)
 	(insert new-string)
 	(message "Doesn't exist, inserted %s for %s" new-string basename)))))
+
+
