@@ -6,5 +6,7 @@ elpaca
 straight
 elpa
 eln-cache
+share
+transient
 
 customs.el

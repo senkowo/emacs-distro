@@ -45,6 +45,13 @@ solute
 solvent
 interweave
 interwine
+umineko
+nekomaki
+uzumaki
+nekurse
+nekorone
+catteroni
+uzuneko
 
 * Ideas:
 - cool interface for exploring the modules and code (parse modules & comments into org documents (use a package?)).

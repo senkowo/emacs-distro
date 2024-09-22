@@ -92,5 +92,10 @@
 
 (use-package anki-editor)
 
+;; C-c bindings
+(C-c-define-key
+  "o" '(:ignore t :which-key "org")
+  "oa" 'org-agenda)
+
 
 (provide 'esper-org)

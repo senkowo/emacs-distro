@@ -19,9 +19,13 @@
 ;;   :config (magit-todos-mode 1))
 
 ;; Access github and gitlab commits/issues/pr/etc from Emacs:
-;; (use-package forge
-;;   :ensure t
-;;   :after magit)
+;; manual: https://magit.vc/manual/forge/index.html
+(use-package forge
+  :ensure t
+  :after magit
+  :custom
+  (auth-sources '("~/.authinfo.gpg")))
+
 
 
 (provide 'esper-magit)

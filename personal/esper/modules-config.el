@@ -86,6 +86,7 @@
 (+require 'esper-lang-lisp)
 (+require 'esper-lang-lisp-adv)
 (+require 'esper-lang-scheme)
+(+require 'esper-lang-java)
 
 ;;;; ############### misc/temp: ###############
 (+require 'esper-server)

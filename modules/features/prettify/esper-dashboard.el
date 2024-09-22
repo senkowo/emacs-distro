@@ -17,9 +17,11 @@
               (redisplay)
               (run-hooks 'dashboard-after-initialize-hook)))
   
-  ;; basically ":after server" and makes new emacsclient frames open dashboard
+  ;; if server-mode, when create new emacsclient frame, switch to dashboard
   (eval-after-load 'server
-    (add-hook 'server-after-make-frame-hook #'dashboard-open)))
+    (add-hook 'server-after-make-frame-hook
+	      (lambda ()
+		(switch-to-buffer dashboard-buffer-name)))))
 
 
 (provide 'esper-dashboard)

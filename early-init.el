@@ -1,4 +1,4 @@
-
+;;; early-init.el --- run before startup -*- lexical-binding: t; -*-
 
 ;; prevent package.el from loading
 (setq package-enable-at-startup nil)

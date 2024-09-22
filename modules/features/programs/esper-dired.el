@@ -62,9 +62,8 @@ Version: 2018-12-23 2022-04-07"
 
 (setq bookmark-save-flag 1) ; save bookmarks to file after every change
 (C-c-define-key
-  "fb" '(:ignore t :which-key "bookmarks")
-  "fb" 'consult-bookmark
-  "fB" 'bookmark-set)
+  "sm" 'consult-bookmark
+  "sM" 'bookmark-set)
 
 ;;; --- leader key defs: ----
 
